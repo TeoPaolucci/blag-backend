@@ -13,6 +13,7 @@ var passport = require('./lib/passport');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var posts = require('./routes/posts');
 
 var app = express();
 
@@ -46,6 +47,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/posts', posts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
