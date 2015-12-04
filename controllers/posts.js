@@ -5,6 +5,30 @@ var Post = require('../models').model('Post');
 module.exports = {
   root: {
     get: function(req, res, next) {
+      Post.find().exec()
+        .then(function(posts) {
+          res.status(200);
+          res.json(posts);
+        })
+        .catch(function(err) {
+          return next(err);
+        })
+      ;
+    }
+  },
+  user: {
+    getById: function(req, res, next) {
+      Post.find({userID: req.params.id}).exec()
+        .then(function(posts) {
+          res.status(200);
+          res.json(posts);
+        })
+        .catch(function(err) {
+          return next(err);
+        })
+      ;
+    },
+    get: function(req, res, next) {
       if(!req.user) {
         var err = new Error("Log in first.");
         return next(err);
@@ -31,19 +55,6 @@ module.exports = {
         .then(function(newpost) {
           res.status(201);
           res.json(newpost);
-        })
-        .catch(function(err) {
-          return next(err);
-        })
-      ;
-    }
-  },
-  user: {
-    get: function(req, res, next) {
-      Post.find({userID: req.params.id}).exec()
-        .then(function(posts) {
-          res.status(200);
-          res.json(posts);
         })
         .catch(function(err) {
           return next(err);
