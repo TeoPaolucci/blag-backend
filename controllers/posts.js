@@ -2,13 +2,17 @@
 
 var Post = require('../models').model('Post');
 
+var wrap = function wrap(key, data) {
+  return {key: data};
+};
+
 module.exports = {
   root: {
     get: function(req, res, next) {
       Post.find().exec()
         .then(function(posts) {
           res.status(200);
-          res.json(posts);
+          res.json(wrap('list', posts));
         })
         .catch(function(err) {
           return next(err);
@@ -21,7 +25,7 @@ module.exports = {
       Post.find({userID: req.params.id}).exec()
         .then(function(posts) {
           res.status(200);
-          res.json(posts);
+          res.json(wrap('list', posts));
         })
         .catch(function(err) {
           return next(err);
@@ -36,7 +40,7 @@ module.exports = {
       Post.find({userID: {$eq: req.user._id.toString()}}).exec()
         .then(function(posts) {
           res.status(200);
-          res.json(posts);
+          res.json(wrap('list', posts));
         })
         .catch(function(err) {
           return next(err);

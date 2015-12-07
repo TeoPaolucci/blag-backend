@@ -5,6 +5,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var uuid = require('uuid');
+var cors = require('cors');
 var MongoStore = require('connect-mongo')(session);
 process.env.SESSION_SECRET || require('dotenv').load();
 // require passport
@@ -37,6 +38,12 @@ app.use(session({
       rng : uuid.nodeRNG
     });
   }
+}));
+
+// cors stuff
+app.use(cors({
+  origin: ['http://localhost:5000'],
+  credentials: true
 }));
 
 // mount return value of `passport.initialize` invocation on `app`
