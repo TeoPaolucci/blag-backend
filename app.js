@@ -21,6 +21,12 @@ var app = express();
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+// cors stuff
+app.use(cors({
+  origin: ['http://localhost:5000'],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
@@ -31,19 +37,13 @@ app.use(session({
     url : "mongodb://localhost/ga-passport-sessions"
   }),
   cookie : {
-    maxAge : 300000 // 5 minutes
+    maxAge : 12*300000 // 5 minutes
   },
   genid : function() {
     return uuid.v4({
       rng : uuid.nodeRNG
     });
   }
-}));
-
-// cors stuff
-app.use(cors({
-  origin: ['http://localhost:5000'],
-  credentials: true
 }));
 
 // mount return value of `passport.initialize` invocation on `app`
