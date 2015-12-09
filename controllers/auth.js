@@ -17,7 +17,9 @@ module.exports = {
     login : {
         post : passport.authenticate('local'),
         all : function(req, res) {
-            res.sendStatus(200);
+            res.json({
+                user: req.user
+            });
         }
     },
     logout : {
@@ -28,7 +30,9 @@ module.exports = {
             }
 
             req.logout();
-            res.sendStatus(200);
+            res.json({
+                message: 'Logged out'
+            });
         }
     },
     changePassword : {
@@ -42,7 +46,9 @@ module.exports = {
             // bcrypt the password
             req.user.setPassword(req.body.password).
                 then(function() {
-                    res.sendStatus(200);
+                    res.json({
+                        message: 'Password changed'
+                    });
                 }).catch(function(err) {
                     next(err);
                 });
@@ -70,7 +76,9 @@ module.exports = {
             pUser.then(function(user) {
                 return user.setPassword(req.body.password);
             }).then(function() {
-                res.sendStatus(200);
+                res.json({
+                    message: 'New user created'
+                });
             }).catch(function(err) {
                 next(err);
             });

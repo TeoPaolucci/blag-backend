@@ -2,8 +2,38 @@
 
 var Post = require('../models').model('Post');
 
+var wrap = function wrap(root, formData) {
+    var wrapper = {};
+    wrapper[root] = formData;
+    return wrapper;
+};
+
 module.exports = {
   root: {
+    get: function(req, res, next) {
+      Post.find().exec()
+        .then(function(posts) {
+          res.status(200);
+          res.json(wrap('posts', posts));
+        })
+        .catch(function(err) {
+          return next(err);
+        })
+      ;
+    }
+  },
+  user: {
+    getById: function(req, res, next) {
+      Post.find({userID: req.params.id}).exec()
+        .then(function(posts) {
+          res.status(200);
+          res.json(wrap('posts', posts));
+        })
+        .catch(function(err) {
+          return next(err);
+        })
+      ;
+    },
     get: function(req, res, next) {
       if(!req.user) {
         var err = new Error("Log in first.");
@@ -12,7 +42,7 @@ module.exports = {
       Post.find({userID: {$eq: req.user._id.toString()}}).exec()
         .then(function(posts) {
           res.status(200);
-          res.json(posts);
+          res.json(wrap('posts', posts));
         })
         .catch(function(err) {
           return next(err);
@@ -31,19 +61,6 @@ module.exports = {
         .then(function(newpost) {
           res.status(201);
           res.json(newpost);
-        })
-        .catch(function(err) {
-          return next(err);
-        })
-      ;
-    }
-  },
-  user: {
-    get: function(req, res, next) {
-      Post.find({userID: req.params.id}).exec()
-        .then(function(posts) {
-          res.status(200);
-          res.json(posts);
         })
         .catch(function(err) {
           return next(err);
