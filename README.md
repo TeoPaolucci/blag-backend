@@ -15,3 +15,5 @@ I have created a Post model witch allows a user to create, view, update, and del
   * viewing one specified post
   * updating one specified post that belongs to the user
   * deleting one specified post that belongs to the user
+
+Hosted URL: https://arcane-stream-6680.herokuapp.com/
